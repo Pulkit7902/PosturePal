@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Posture Pal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            background: #4CAF50;
+            color: white;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .video-container, .query-container {
+            margin-bottom: 30px;
+        }
+        .video-container img {
+            width: 100%;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        #response {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Posture Pal - Flask App</h1>
+
+<div class="container">
+
+    <!-- Video Feed Section -->
+    <div class="video-container">
+        <h2>Live Posture Detection</h2>
+        <img src="{{ url_for('video') }}" alt="Video Feed">
+    </div>
+
+    <!-- Query Form Section -->
+    <div class="query-container">
+        <h2>Fitness Query</h2>
+        <form id="query-form">
+            <input type="text" name="query" placeholder="Ask a fitness question" required>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="response"></div>
+    </div>
+
+</div>
+
+<!-- <script>
+    document.getElementById("query-form").onsubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        
+        const response = await fetch("/query", {
+            method: "POST",
+            body: formData
+        });
+        
+        const data = await response.json();
+        document.getElementById("response").innerText = data.response || data.error;
+    }
+</script> -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const chatbotToggleBtn = document.getElementById('chatbot-toggle-btn');
+    const chatbotPopup = document.getElementById('chatbot-popup');
+    const closeBtn = document.getElementById('close-btn');
+    const queryForm = document.getElementById('query-form');
+    const responseDiv = document.getElementById('response');
+
+    // Toggle chatbot popup
+    chatbotToggleBtn.addEventListener('click', () => {
+        chatbotPopup.style.display = chatbotPopup.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // Close chatbot popup
+    closeBtn.addEventListener('click', () => {
+        chatbotPopup.style.display = 'none';
+    });
+
+    // Form submission handler
+    queryForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+
+        try {
+            const response = await fetch('/query', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            responseDiv.innerText = data.response || data.error;
+        } catch (error) {
+            console.error('Error:', error);
+            responseDiv.innerText = 'Failed to get a response. Please try again.';
+        }
+    };
+});
+
+</script>
+
+</body>
+</html>
